@@ -73,4 +73,9 @@ export type PlaneDetailsMessage = {
   data: PlaneDetailed;
 };
 
+export type ErrorMessage = {
+  type: 'error';
+  message: string;
+};
+
 export type ConnectionStatus = 'connecting' | 'open' | 'closed' | 'error';

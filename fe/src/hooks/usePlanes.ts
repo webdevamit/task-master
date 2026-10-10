@@ -1,9 +1,9 @@
 import { useSyncExternalStore } from 'react';
-import type { BasicPlanesMessage, PlaneDetailed } from '../types/flight';
+import type { BasicPlanesMessage, PlaneBasic } from '../types/flight';
 import { createSocketStore } from '../utils/createSocketStore';
 import { SOCKET_PLANES_URL } from '../constants/config';
 
-const planesStore = createSocketStore<PlaneDetailed[]>({
+const planesStore = createSocketStore<PlaneBasic[]>({
   url: SOCKET_PLANES_URL,
   initialData: [],
   handleMessage: (message) => {
