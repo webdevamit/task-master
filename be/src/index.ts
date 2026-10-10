@@ -8,11 +8,11 @@ const PORT = parseInt(process.env.PORT || "4000", 10);
 const PLANES_COUNT = parseInt(process.env.PLANES_COUNT || "20", 10);
 const BASIC_UPDATE_INTERVAL_MS = parseInt(
   process.env.BASIC_UPDATE_INTERVAL_MS || "1000",
-  10
+  10,
 );
 const DETAILED_UPDATE_INTERVAL_MS = parseInt(
   process.env.DETAILED_UPDATE_INTERVAL_MS || "1000",
-  10
+  10,
 );
 
 /**
@@ -32,7 +32,12 @@ function main() {
   console.log(`✅ Initialized ${PLANES_COUNT} planes`);
 
   // Create and start WebSocket server
-  const wss = createServer(PORT, simulation, BASIC_UPDATE_INTERVAL_MS, DETAILED_UPDATE_INTERVAL_MS);
+  const wss = createServer(
+    PORT,
+    simulation,
+    BASIC_UPDATE_INTERVAL_MS,
+    DETAILED_UPDATE_INTERVAL_MS,
+  );
 
   wss.on("listening", () => {
     console.log(`🌐 WebSocket server listening on ws://localhost:${PORT}`);
@@ -60,4 +65,3 @@ function main() {
 }
 
 main();
-

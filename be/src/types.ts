@@ -72,4 +72,3 @@ export type PlaneDetailsMessage = {
   type: "plane-details";
   data: PlaneDetailed;
 };
-
