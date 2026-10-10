@@ -1,10 +1,10 @@
 import { useMemo, useSyncExternalStore } from 'react';
 import { createSocketStore } from '../utils/createSocketStore';
 import { SOCKET_PLANE_URL } from '../constants/config';
-import type { ErrorMessage, PlaneDetailsMessage } from '../types/flight';
+import type { ErrorMessage, PlaneDetailed, PlaneDetailsMessage } from '../types/flight';
 
 const planeStore = (planeId: string) =>
-  createSocketStore({
+  createSocketStore<PlaneDetailed | null>({
     url: SOCKET_PLANE_URL,
     initialData: null,
     onOpen: (send) => {
@@ -18,10 +18,10 @@ const planeStore = (planeId: string) =>
     handleMessage: (message) => {
       // Handle incoming messages for the specific plane
       const msg = message as PlaneDetailsMessage | ErrorMessage;
-      if ('type' in msg) {
-        return msg.type === 'error' ? { data: null, error: msg.message } : null;
+      if ('type' in msg && msg.type === 'error') {
+        return { data: null, error: msg.message };
       }
-      return { data: msg, error: null };
+      return { data: msg?.data, error: null };
     },
   });
 
