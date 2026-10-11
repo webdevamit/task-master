@@ -14,10 +14,12 @@ import type { PlaneBasic } from '../types/flight';
 setWorkerUrl(maplibreglWorkerUrl);
 
 export const useMapLibre = ({
+  selectedPlaneId,
   containerRef,
   data: planes,
   onSelectPlane,
 }: {
+  selectedPlaneId: string | null;
   containerRef: RefObject<HTMLDivElement | null>;
   data: PlaneBasic[] | [];
   onSelectPlane: (planeId: string) => void;
@@ -43,10 +45,13 @@ export const useMapLibre = ({
       });
       instance.addLayer({
         id: 'planes-layer',
-        type: 'symbol',
+        type: 'circle',
         source: 'planes-source',
-        layout: {
-          'icon-image': 'airport',
+        paint: {
+          'circle-radius': 6,
+          'circle-color': ['get', 'color'],
+          'circle-stroke-width': 1,
+          'circle-stroke-color': '#000000',
         },
       });
       instance.on('mouseenter', 'planes-layer', () => {
@@ -55,8 +60,8 @@ export const useMapLibre = ({
       instance.on('mouseleave', 'planes-layer', () => {
         instance.getCanvas().style.cursor = '';
       });
+      isMapLoadedRef.current = true;
     });
-    isMapLoadedRef.current = true;
     mapRef.current = instance;
 
     return () => {
@@ -80,11 +85,37 @@ export const useMapLibre = ({
         },
         properties: {
           id: plane.id,
+          color: plane.color,
         },
       }));
       source.setData({ type: 'FeatureCollection', features });
     }
   }, [planes]);
+
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || !isMapLoadedRef.current || !map.getLayer('planes-layer')) return;
+
+    const highlightedId = selectedPlaneId ?? '';
+    map.setPaintProperty('planes-layer', 'circle-radius', [
+      'case',
+      ['==', ['get', 'id'], highlightedId],
+      9,
+      6,
+    ]);
+    map.setPaintProperty('planes-layer', 'circle-stroke-width', [
+      'case',
+      ['==', ['get', 'id'], highlightedId],
+      3,
+      1,
+    ]);
+    map.setPaintProperty('planes-layer', 'circle-stroke-color', [
+      'case',
+      ['==', ['get', 'id'], highlightedId],
+      '#ffffff',
+      '#000000',
+    ]);
+  }, [selectedPlaneId]);
 
   useEffect(() => {
     const map = mapRef.current;

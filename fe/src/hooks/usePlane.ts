@@ -13,7 +13,6 @@ const planeStore = (planeId: string) =>
     },
     onClose: (send) => {
       // Optionally send a message to the server when the connection closes
-      send({ type: 'unsubscribe', planeId });
     },
     handleMessage: (message) => {
       // Handle incoming messages for the specific plane

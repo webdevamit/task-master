@@ -37,8 +37,7 @@ const App = () => {
   return (
     <main className="app">
       <Header />
-      <MapView onSelectPlane={handlePlaneClick} />
-
+      <MapView selectedPlaneId={selectedPlaneId} onSelectPlane={handlePlaneClick} />
       {selectedPlaneId &&
         createPortal(
           <ModalBox onClose={handleClosePopup}>

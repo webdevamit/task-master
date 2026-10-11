@@ -101,7 +101,7 @@ export function createSocketStore<T>({
         status: 'closed',
       });
 
-      if (event.code !== 1008) scheduleReconnect();
+      if (event.code !== 1008 && listeners.size > 0) scheduleReconnect();
     };
   };
 
@@ -116,6 +116,8 @@ export function createSocketStore<T>({
   };
 
   const disconnect = () => {
+    clearTimeout(reconnectTimeoutId);
+    reconnectTimeoutId = undefined;
     if (!socket) return;
     const ws = socket;
     socket = null;

@@ -30,8 +30,13 @@ const Plane = ({ planeId, onClose }: { planeId: string; onClose: () => void }) =
         </div>
 
         <div className="flex items-center gap-1">
+          {status === 'closed' && (
+            <span className="rounded-full bg-red-500 px-1.5 py-0.5 text-[8px] font-semibold capitalize">
+              Reconnecting...
+            </span>
+          )}
           {data && (
-            <span className="rounded-full bg-green-600 px-1.5 py-0.5 text-[8px] font-semibold capitalize">
+            <span className="rounded-full bg-green-500 px-1.5 py-0.5 text-[8px] font-semibold capitalize">
               {data.status}
             </span>
           )}
