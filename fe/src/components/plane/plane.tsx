@@ -24,7 +24,7 @@ const Plane = ({ planeId, onClose }: { planeId: string; onClose: () => void }) =
       <header className="flex items-center justify-between gap-2 border-b border-gray-700 px-2 py-1.5">
         <div className="min-w-0">
           <p className="text-[9px] uppercase tracking-wide text-gray-400">Flight details</p>
-          <h1 className="truncate text-[11px] font-semibold">
+          <h1 className="truncate text-[11px] font-semibold" style={{ color: data?.color }}>
             {data ? `${data.airline} ${data.flightNumber}` : 'Loading flight…'}
           </h1>
         </div>

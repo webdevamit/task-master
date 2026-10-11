@@ -11,7 +11,7 @@ const planeStore = (planeId: string) =>
       // Optionally send a message to the server when the connection opens
       send({ type: 'subscribe', planeId });
     },
-    onClose: (send) => {
+    onClose: () => {
       // Optionally send a message to the server when the connection closes
     },
     handleMessage: (message) => {
