@@ -35,6 +35,7 @@ export function createSocketStore<T>({
   let socket: WebSocket | null = null;
   const listeners = new Set<() => void>();
   let attempt = 0;
+  const maxAttempt = 20;
   let reconnectTimeoutId: ReturnType<typeof setTimeout> | undefined;
   let idleTimeoutId: ReturnType<typeof setTimeout> | undefined;
 
@@ -90,7 +91,7 @@ export function createSocketStore<T>({
       update({ status: 'error', error: 'WebSocket encountered an error', data: snapshot.data });
     };
 
-    ws.onclose = () => {
+    ws.onclose = (event) => {
       if (socket !== ws) {
         return;
       }
@@ -100,12 +101,16 @@ export function createSocketStore<T>({
         status: 'closed',
       });
 
-      scheduleReconnect();
+      if (event.code !== 1008) scheduleReconnect();
     };
   };
 
   const scheduleReconnect = () => {
-    const base = Math.min(1000 * 2 ** attempt, 30000); // Exponential backoff capped at 30 seconds
+    if (attempt > maxAttempt) {
+      console.error('Max reconnection attempts reached. Giving up.');
+      return;
+    }
+    const base = Math.min(1000 * Math.pow(2, attempt), 30000); // Exponential backoff capped at 30 seconds
     attempt++;
     reconnectTimeoutId = setTimeout(connect, base / 2 + (Math.random() * base) / 2);
   };

@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom';
 import Header from './components/header';
 import Plane from './components/plane/plane';
 import ModalBox from './components/ui/modal';
+import MapView from './components/map';
 
 const App = () => {
   const [selectedPlaneId, setSelectedPlaneId] = useState<string | null>(null);
@@ -34,23 +35,17 @@ const App = () => {
   };
 
   return (
-    <main className="App">
+    <main className="app">
       <Header />
-      <div className="app__content">
-        <div className="app__map">
-          {/* Render your map component here */}
-          <p>Map goes here</p>
-          <button onClick={() => handlePlaneClick('plane-1')}>Select Plane</button>
-        </div>
+      <MapView onSelectPlane={handlePlaneClick} />
 
-        {selectedPlaneId &&
-          createPortal(
-            <ModalBox onClose={handleClosePopup}>
-              <Plane planeId={selectedPlaneId} onClose={handleClosePopup} />
-            </ModalBox>,
-            document.body,
-          )}
-      </div>
+      {selectedPlaneId &&
+        createPortal(
+          <ModalBox onClose={handleClosePopup}>
+            <Plane planeId={selectedPlaneId} onClose={handleClosePopup} />
+          </ModalBox>,
+          document.body,
+        )}
     </main>
   );
 };
