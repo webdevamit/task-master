@@ -1,7 +1,8 @@
-import { usePlane } from '../hooks/usePlane';
-import CloseButton from './close-button';
-import ErrorState from './error';
-import LoadingState from './loading';
+import { usePlane } from '../../hooks/usePlane';
+import { transformPlaneData } from '../../utils/transformer';
+import CloseButton from '../ui/close-button';
+import ErrorState from '../ui/error';
+import LoadingState from '../ui/loading';
 
 const cardClassName = 'w-64 rounded-lg border border-gray-700 bg-gray-900 text-white shadow-lg';
 
@@ -16,24 +17,7 @@ const Plane = ({ planeId, onClose }: { planeId: string; onClose: () => void }) =
     return <LoadingState onClose={onClose} />;
   }
 
-  const rows = data
-    ? [
-        { label: 'Route', value: `${data.origin.city} → ${data.destination.city}` },
-        { label: 'Origin', value: data.origin.airport },
-        { label: 'Destination', value: data.destination.airport },
-        { label: 'Aircraft', value: data.model },
-        { label: 'Reg', value: data.registration },
-        { label: 'Alt', value: `${data.altitude} m` },
-        { label: 'Speed', value: `${data.speed} m/s` },
-        { label: 'Heading', value: `${data.heading}°` },
-        { label: 'V/S', value: `${data.verticalSpeed} m/s` },
-        { label: 'Lat', value: String(data.latitude) },
-        { label: 'Lng', value: String(data.longitude) },
-        { label: 'Passengers', value: `${data.numberOfPassengers} / ${data.maxPassengers}` },
-        { label: 'Duration', value: `${data.flightDuration} min` },
-        { label: 'Arrival', value: new Date(data.estimatedArrival).toLocaleString() },
-      ]
-    : [];
+  const rows = transformPlaneData(data);
 
   return (
     <section className={cardClassName}>
@@ -59,17 +43,12 @@ const Plane = ({ planeId, onClose }: { planeId: string; onClose: () => void }) =
         <div className="space-y-2 p-2 text-[10px]">
           <div className="grid grid-cols-2 gap-x-2 gap-y-1">
             {rows.map(({ label, value }) => (
-              <>
-                <span key={`${label}-label`} className="text-gray-400">
-                  {label}
-                </span>
-                <span
-                  key={`${label}-value`}
-                  className={label === 'Route' || label === 'Aircraft' ? 'font-semibold' : ''}
-                >
+              <div key={label} className="contents">
+                <span className="text-gray-400">{label}</span>
+                <span className={label === 'Route' || label === 'Aircraft' ? 'font-semibold' : ''}>
                   {value}
                 </span>
-              </>
+              </div>
             ))}
           </div>
         </div>

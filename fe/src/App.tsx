@@ -1,8 +1,8 @@
-import { useEffect, useState, type ReactNode } from 'react';
+import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import Header from './components/header';
-import Plane from './components/plane';
-import ModalBox from './components/modal-box';
+import Plane from './components/plane/plane';
+import ModalBox from './components/ui/modal';
 
 const App = () => {
   const [selectedPlaneId, setSelectedPlaneId] = useState<string | null>(null);
